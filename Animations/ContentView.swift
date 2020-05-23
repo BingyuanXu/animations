@@ -9,13 +9,27 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        Text("Hello, World!")
+  @State private var animationAmount : CGFloat = 1
+  
+  var body: some View {
+    Button("tap me ") {
+      self.animationAmount += 1
     }
+    .padding(50)
+    .background(Color.red)
+    .foregroundColor(Color.white)
+    .clipShape(Circle())
+    .scaleEffect(animationAmount)
+    .blur(radius: animationAmount - 1)
+    .animation(Animation.interpolatingSpring(stiffness: 100, damping: 8)
+    .repeatCount(3, autoreverses: false)
+    )
+    
+  }
 }
 
 struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
+  static var previews: some View {
+    ContentView()
+  }
 }
