@@ -9,21 +9,25 @@
 import SwiftUI
 
 struct ContentView: View {
-  @State private var enabled = false
-  
+  @State private var dragAmount = CGSize.zero //The size whose width and height are both zero.
   var body: some View {
-    Button("Tap Me") {
-      self.enabled.toggle()
-      
-    }
-      .frame(width: 200, height: 200)
-      .background(enabled ? Color.blue : Color.red)
-       .animation(nil)
-      .foregroundColor(.white)
-      .clipShape(RoundedRectangle(cornerRadius: enabled ? 60 : 0))
-      .animation(Animation.interpolatingSpring(stiffness: 50, damping: 2))
+    LinearGradient(gradient: Gradient(colors: [.yellow, .red]), startPoint: .topLeading, endPoint: .bottomTrailing)
+      .frame(width: 300, height: 200)
+      .clipShape(RoundedRectangle(cornerRadius: 10))
+      .offset(dragAmount)
+      //      .animation(.spring())
+      .gesture(
+        DragGesture()
+          .onChanged { self.dragAmount = $0.translation }
+          .onEnded { _ in
+            withAnimation(.spring()) {
+              self.dragAmount = .zero
+            }
+        }
+    )
   }
 }
+
 
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
